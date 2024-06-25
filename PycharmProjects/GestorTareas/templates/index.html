@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Gestión de Tareas</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
+    <!-- Fuente de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+    <!-- Nuestra hoja de estilo (main.css) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/united/bootstrap.min.css" integrity="sha384-JW3PJkbqVWtBhuV/gsuyVVt3m/ecRJjwXC3gCXlTzZZV+zIEEl6AnryAriT7GWYm" crossorigin="anonymous">
+    <style>
+        body {
+            background: #D3B292; /* Fondo marrón claro */
+            color: #4E3629; /* Texto marrón oscuro */
+            font-family: 'Libre Baskerville', serif; /* Fuente Libre Baskerville */
+        }
+
+        h1 {
+            color: #8B4513; /* Marrón oscuro para el texto del encabezado */
+            text-align: center;
+            background: linear-gradient(to right, #D2691E, #8B4513); /* Degradado marrón para el fondo del encabezado */
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #A0522D; /* Marrón para los enlaces */
+        }
+
+        .btn {
+            background-color: #A0522D; /* Marrón para el fondo del botón */
+            color: #fff; /* Texto blanco en el botón */
+        }
+
+        label[for="contenido_tarea"] {
+            color: #8B4513; /* Marrón oscuro para el rótulo */
+        }
+
+        #contenido_tarea::placeholder {
+            color: #8B4513; /* Marrón oscuro para el marcador de posición */
+        }
+
+        .tarea_pendiente {
+            color: #4E3629; /* Marrón oscuro para las tareas pendientes */
+        }
+
+        .card {
+            background-color: #D2691E; /* Fondo marrón para la tarjeta */
+            border: 1px solid #8B4513; /* Borde marrón oscuro */
+        }
+
+        .card-header {
+            background-color: #8B4513; /* Marrón oscuro para la cabecera de la tarjeta */
+        }
+
+        .card-body {
+            background-color: #D3B292; /* Fondo marrón claro para el cuerpo de la tarjeta */
+        }
+
+        .list-group-item {
+            background-color: #D3B292; /* Fondo marrón claro para los elementos de la lista */
+        }
+
+        .list-group-item:hover {
+            background-color: #C0A080; /* Cambia el color al pasar el ratón sobre los elementos de la lista */
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container p-4">
+        <h1 class="display-4 text-center mt-4 titulo">App de Gestión de Tareas</h1>
+        <div class="row">
+            <div class="col-md-4 offset-md-4 my-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <form action="/crear-tarea" method="post" id="formularioTareas">
+                            <div class="form-group">
+                                <label for="contenido_tarea">Tarea/s pendiente/s:</label>
+                                <input type="text" name="contenido_tarea" id="contenido_tarea" placeholder="Tarea" class="form-control" autofocus>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Guardar
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for tarea in lista_de_tareas %}
+                                <li class="list-group-item">
+                                    <span class="{% if tarea.hecha==true %} tarea_hecha {% endif %}">
+                                        {{ tarea.contenido }} - {{ tarea.fecha_limite }}
+                                    </span>
+                                    <a href="/tarea-hecha/{{ tarea.id }}" style="text-decoration:none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-highlighter" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M11.096.644a2 2 0 0 1 2.791.036l1.433 1.433a2 2 0 0 1 .035 2.791l-.413.435-8.07 8.995a.5.5 0 0 1-.372.166h-3a.5.5 0 0 1-.234-.058l-.412.412A.5.5 0 0 1 2.5 15h-2a.5.5 0 0 1-.354-.854l1.412-1.412A.5.5 0 0 1 1.5 12.5v-3a.5.5 0 0 1 .166-.372l8.995-8.07.435-.414Zm-.115 1.47L2.727 9.52l3.753 3.753 7.406-8.254-2.905-2.906Zm3.585 2.17.064-.068a1 1 0 0 0-.017-1.396L13.18 1.387a1 1 0 0 0-1.396-.018l-.068.065 2.85 2.85M5.293 13.5 2.5 10.707v1.586L3.707 13.5z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="/eliminar-tarea/{{ tarea.id }}" style="text-decoration:none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
